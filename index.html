@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Rejane</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #0b0b14;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 520px;
+    padding: 30px;
+    position: relative;
+    z-index: 10;
+}
+
+.text {
+    font-size: 22px;
+    line-height: 1.6;
+    min-height: 120px;
+    margin-bottom: 30px;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+#buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 12px 25px;
+    border-radius: 40px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: white;
+    color: black;
+}
+
+.bg-glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%);
+    border-radius: 50%;
+    animation: pulse 5s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.3); opacity: 0.8; }
+}
+
+.big-heart {
+    font-size: 100px;
+    animation: pulseHeart 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseHeart {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="container">
+    <div class="text" id="text"></div>
+    <div id="buttons"></div>
+</div>
+
+<script>
+const textElement = document.getElementById("text");
+const buttonsContainer = document.getElementById("buttons");
+
+function setMessage(msg, callback) {
+    textElement.style.opacity = 0;
+    setTimeout(() => {
+        textElement.innerHTML = msg.replace(/\n/g,"<br>");
+        textElement.style.opacity = 1;
+        if(callback) callback();
+    },600);
+}
+
+function setButtons(buttonList) {
+    buttonsContainer.innerHTML = "";
+    buttonList.forEach(b => {
+        const btn = document.createElement("button");
+        btn.innerText = b.text;
+        btn.onclick = b.action;
+        buttonsContainer.appendChild(btn);
+    });
+}
+
+function step1() {
+    setMessage("Rejane...\n\nEra pra ser só mais uma conversa.\nMas não foi.", () => {
+        setButtons([{ text: "Continuar", action: step2 }]);
+    });
+}
+
+function step2() {
+    setMessage("Você começou a aparecer nos meus pensamentos\nsem esforço.\nSem exagero.\nSó... naturalmente.", () => {
+        setButtons([{ text: "E agora?", action: step3 }]);
+    });
+}
+
+function step3() {
+    setMessage("Eu não quero pressa.\nNem rótulos.\nNem promessas grandes.\n\nSó quero saber uma coisa.", () => {
+        setButtons([{ text: "Qual?", action: question }]);
+    });
+}
+
+function question() {
+    setMessage("Você também sente que tem algo bonito acontecendo aqui?", () => {
+        setButtons([
+            { text: "Sim", action: yes },
+            { text: "Ainda estou descobrindo", action: calm }
+        ]);
+    });
+}
+
+function showHeartThenRestart(message) {
+    setMessage(message, () => {
+        setButtons([]);
+
+        setTimeout(() => {
+            textElement.innerHTML = "<div class='big-heart'>❤️</div>";
+        }, 800);
+
+        setTimeout(() => {
+            setMessage("Recomeçar tudo de novo?", () => {
+                setButtons([{ text: "Recomeçar", action: () => location.reload() }]);
+            });
+        }, 3500);
+    });
+}
+
+function yes() {
+    showHeartThenRestart("Então vamos deixar acontecer.\nCom calma.\nCom verdade.\n\nEu gosto do que estamos vivendo.");
+}
+
+function calm() {
+    showHeartThenRestart("E tudo bem.\nCoisas bonitas não precisam de pressa.\n\nSó estar perto de você já tem sido especial.");
+}
+
+window.onload = step1;
+</script>
+
+</body>
+</html>
