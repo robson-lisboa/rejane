@@ -32,7 +32,7 @@ html, body {
     line-height: 1.6;
     min-height: 120px;
     margin-bottom: 30px;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.6s ease;
     opacity: 0;
 }
 
@@ -75,8 +75,9 @@ button:hover {
 }
 
 .big-heart {
-    font-size: 100px;
+    font-size: 110px;
     animation: pulseHeart 1.5s ease-in-out infinite;
+    margin-bottom: 25px;
 }
 
 @keyframes pulseHeart {
@@ -145,28 +146,31 @@ function question() {
     });
 }
 
-function showHeartThenRestart(message) {
+function showFinalHeart(message) {
     setMessage(message, () => {
         setButtons([]);
 
         setTimeout(() => {
-            textElement.innerHTML = "<div class='big-heart'>❤️</div>";
-        }, 800);
+            textElement.style.opacity = 0;
 
-        setTimeout(() => {
-            setMessage("Recomeçar tudo de novo?", () => {
-                setButtons([{ text: "Recomeçar", action: () => location.reload() }]);
-            });
-        }, 3500);
+            setTimeout(() => {
+                textElement.innerHTML = `
+                    <div class="big-heart">❤️</div>
+                    <button onclick="location.reload()">Recomeçar</button>
+                `;
+                textElement.style.opacity = 1;
+            }, 600);
+
+        }, 1200);
     });
 }
 
 function yes() {
-    showHeartThenRestart("Então vamos deixar acontecer.\nCom calma.\nCom verdade.\n\nEu gosto do que estamos vivendo.");
+    showFinalHeart("Então vamos deixar acontecer.\nCom calma.\nCom verdade.\n\nEu gosto do que estamos vivendo.");
 }
 
 function calm() {
-    showHeartThenRestart("E tudo bem.\nCoisas bonitas não precisam de pressa.\n\nSó estar perto de você já tem sido especial.");
+    showFinalHeart("E tudo bem.\nCoisas bonitas não precisam de pressa.\n\nSó estar perto de você já tem sido especial.");
 }
 
 window.onload = step1;
